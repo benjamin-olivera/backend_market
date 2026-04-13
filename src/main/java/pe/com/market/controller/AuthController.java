@@ -1,48 +1,54 @@
 package pe.com.market.controller;
 
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import pe.com.market.dto.LoginRequest;
-import pe.com.market.dto.LoginResponse;
-import pe.com.market.exception.ApiError;
-import pe.com.market.model.Rol;
-import pe.com.market.model.Usuario;
-import pe.com.market.service.UsuarioService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+import pe.com.market.security.JwtService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private UsuarioService service;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
 
-        Usuario user = service.login(request.getUsername(), request.getPassword());
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.username(),
+                        request.password()
+                )
+        );
 
-        if (user != null) {
+        UserDetails user = (UserDetails) authentication.getPrincipal();
 
-            String rol = user.getRoles()
-                    .stream()
-                    .findFirst()
-                    .map(Rol::getNombre)
-                    .orElse("SIN_ROL");
+        List<String> roles = user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)  // "ROLE_ADMIN"
+                .map(r -> r.replace("ROLE_", ""))     // "ADMIN"
+                .toList();
 
-            return ResponseEntity.ok(
-                    new LoginResponse("login exitoso", user.getUsername(), rol)
-            );
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiError("Error de autenticación", List.of("Credenciales incorrectas")));
-        }
+        String token = jwtService.generateToken(user, roles);
+
+        return ResponseEntity.ok(new LoginResponse(
+                token,
+                user.getUsername(),
+                roles
+        ));
     }
+
+    // DTOs simples como records (puedes ponerlos en otro paquete si prefieres)
+
+    public record LoginRequest(String username, String password) {}
+
+    public record LoginResponse(String token, String username, List<String> roles) {}
 }

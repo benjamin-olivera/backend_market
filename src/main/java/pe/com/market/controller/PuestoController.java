@@ -1,64 +1,71 @@
 package pe.com.market.controller;
 
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.com.market.model.Puesto;
-import pe.com.market.model.Socio;
-import pe.com.market.model.SocioPuesto;
-import pe.com.market.repository.PuestoRepository;
-import pe.com.market.repository.SocioPuestoRepository;
-import pe.com.market.repository.SocioRepository;
+import pe.com.market.dto.puesto.AsignarPuestoRequest;
+import pe.com.market.dto.puesto.PuestoRequest;
+import pe.com.market.dto.puesto.PuestoResponse;
+import pe.com.market.model.puesto.Puesto;
+import pe.com.market.repository.puesto.PuestoRepository;
+import pe.com.market.service.puesto.SocioPuestoService;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/mercado/puestos")
+@RequiredArgsConstructor
 public class PuestoController {
 
     private final PuestoRepository puestoRepository;
-    private final SocioRepository socioRepository;
-    private final SocioPuestoRepository socioPuestoRepository;
-
-    public PuestoController(PuestoRepository puestoRepository,
-                            SocioRepository socioRepository,
-                            SocioPuestoRepository socioPuestoRepository) {
-        this.puestoRepository = puestoRepository;
-        this.socioRepository = socioRepository;
-        this.socioPuestoRepository = socioPuestoRepository;
-    }
+    private final SocioPuestoService socioPuestoService;
 
     @GetMapping
-    public List<Puesto> listar() {
-        return puestoRepository.findAll();
+    public ResponseEntity<List<PuestoResponse>> listar() {
+        List<PuestoResponse> lista = puestoRepository.findAll().stream()
+                .map(this::mapearAPuestoResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lista);
     }
 
     @PostMapping
-    public Puesto crear(@RequestBody Puesto puesto) {
-        puesto.setEstado(true);
-        return puestoRepository.save(puesto);
+    public ResponseEntity<PuestoResponse> crear(@Valid @RequestBody PuestoRequest request) {
+        Puesto p = new Puesto();
+        p.setCodigo(request.getCodigo());
+        p.setDescripcion(request.getDescripcion());
+        p.setEsPropiedadAsociacion(request.getEsPropiedadAsociacion());
+        p.setEstado(true);
+
+        Puesto guardado = puestoRepository.save(p);
+        return ResponseEntity.ok(mapearAPuestoResponse(guardado));
     }
 
-    @PostMapping("/{codigo}/asignar-socio/{idSocio}")
-    public ResponseEntity<?> asignar(@PathVariable String codigo,
-                                     @PathVariable Integer idSocio) {
+    // Asignar un puesto a un socio
+    @PostMapping("/asignar")
+    public ResponseEntity<?> asignarPuesto(@Valid @RequestBody AsignarPuestoRequest request) {
 
-        Puesto puesto = puestoRepository.findByCodigo(codigo)
-                .orElseThrow(() -> new RuntimeException("Puesto no encontrado"));
-        Socio socio = socioRepository.findById(idSocio)
-                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+        socioPuestoService.asignarPuesto(
+                request.getIdSocio(),
+                request.getIdPuesto(),
+                request.getFechaAsignacion()
+        );
 
-        socioPuestoRepository.findByPuesto(puesto)
-                .ifPresent(socioPuestoRepository::delete);
-
-        SocioPuesto sp = new SocioPuesto();
-        sp.setPuesto(puesto);
-        sp.setSocio(socio);
-        sp.setFechaAsignacion(Date.valueOf(LocalDate.now()));
-        socioPuestoRepository.save(sp);
-
-        return ResponseEntity.ok(puesto);
+        return ResponseEntity.ok().build();
     }
 
+
+
+    // ================== helpers ==================
+
+    private PuestoResponse mapearAPuestoResponse(Puesto p) {
+        PuestoResponse resp = new PuestoResponse();
+        resp.setId(p.getIdPuesto());
+        resp.setCodigo(p.getCodigo());
+        resp.setDescripcion(p.getDescripcion());
+        resp.setEstado(p.getEstado());
+        resp.setEsPropiedadAsociacion(p.getEsPropiedadAsociacion());
+        return resp;
+    }
 }

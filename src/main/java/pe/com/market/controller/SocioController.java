@@ -1,29 +1,32 @@
+// pe/com/market/controller/SocioController.java
 package pe.com.market.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import pe.com.market.model.Socio;
-import pe.com.market.repository.SocioRepository;
+import pe.com.market.dto.socio.SocioBusquedaResponse;
+import pe.com.market.dto.socio.SocioResponse;
+import pe.com.market.service.socio.SocioService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mercado/socios")
+@RequestMapping("/api/socios")
+@RequiredArgsConstructor
 public class SocioController {
 
-    private final SocioRepository socioRepository;
+    private final SocioService socioService;
 
-    public SocioController(SocioRepository socioRepository) {
-        this.socioRepository = socioRepository;
+    // /api/socios/buscar-por-dni?dni=70 (autocomplete)
+    @GetMapping("/buscar-por-dni")
+    public List<SocioBusquedaResponse> buscarPorDniPrefix(
+            @RequestParam("dni") String dniPrefix
+    ) {
+        return socioService.buscarPorDniPrefix(dniPrefix);
     }
 
-    @GetMapping
-    public List<Socio> listar() {
-        return socioRepository.findAll();
-    }
-
-    @PostMapping
-    public Socio crear(@RequestBody Socio socio) {
-        socio.setEstado(true);
-        return socioRepository.save(socio);
+    // /api/socios/{dni} (detalle completo)
+    @GetMapping("/{dni}")
+    public SocioResponse obtenerPorDni(@PathVariable String dni) {
+        return socioService.obtenerSocioPorDni(dni);
     }
 }
