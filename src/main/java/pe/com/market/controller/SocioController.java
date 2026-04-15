@@ -10,7 +10,7 @@ import pe.com.market.service.socio.SocioService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/socios")
+@RequestMapping("/socios")
 @RequiredArgsConstructor
 public class SocioController {
 

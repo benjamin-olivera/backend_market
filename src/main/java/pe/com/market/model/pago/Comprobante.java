@@ -19,7 +19,7 @@ public class Comprobante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_comprobante")
-    private Long idComprobante;
+    private Integer idComprobante;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_puesto", nullable = false)

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/mercado/puestos")
+@RequestMapping("/puestos")
 @RequiredArgsConstructor
 public class PuestoController {
 

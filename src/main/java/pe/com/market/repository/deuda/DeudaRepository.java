@@ -6,7 +6,7 @@ import pe.com.market.model.deuda.Deuda;
 
 import java.util.List;
 
-public interface DeudaRepository extends JpaRepository<Deuda, Long> {
+public interface DeudaRepository extends JpaRepository<Deuda, Integer> {
 
     // Para caja
     List<Deuda> findByPuesto_CodigoAndEstado(String codigoPuesto, EstadoDeuda estado);

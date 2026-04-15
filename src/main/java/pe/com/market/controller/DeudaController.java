@@ -12,7 +12,7 @@ import pe.com.market.service.deuda.DeudaService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mercado/deudas")
+@RequestMapping("/deudas")
 @RequiredArgsConstructor
 public class DeudaController {
 

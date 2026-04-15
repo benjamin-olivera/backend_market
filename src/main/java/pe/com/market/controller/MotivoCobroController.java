@@ -10,7 +10,7 @@ import pe.com.market.repository.deuda.MotivoCobroRepository;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mercado/motivos")
+@RequestMapping("/motivos")
 @RequiredArgsConstructor
 public class MotivoCobroController {
 

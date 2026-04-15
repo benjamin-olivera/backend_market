@@ -1,12 +1,14 @@
 package pe.com.market.service.pago;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pe.com.market.dto.pago.ComprobanteResponse;
-import pe.com.market.dto.pago.DeudaPagoItem;
-import pe.com.market.dto.pago.MetodoPagoRequest;
-import pe.com.market.dto.pago.PagoRequest;
+import pe.com.market.dto.PagoListadoRow;
+import pe.com.market.dto.pago.*;
 import pe.com.market.enums.EstadoDeuda;
 import pe.com.market.model.auth.Usuario;
 import pe.com.market.model.deuda.Deuda;
@@ -19,14 +21,20 @@ import pe.com.market.repository.deuda.DeudaRepository;
 import pe.com.market.repository.pago.ComprobanteRepository;
 import pe.com.market.repository.pago.DetalleComprobanteRepository;
 import pe.com.market.repository.pago.MetodoPagoComprobanteRepository;
+import pe.com.market.repository.pago.PagoRepository;
 import pe.com.market.repository.puesto.PuestoRepository;
 import pe.com.market.service.pago.helper.PagoValidador;
 import pe.com.market.service.pago.helper.PagoValidador.DeudaValidationResult;
 import pe.com.market.service.pago.helper.TotalesPagoHelper;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +49,45 @@ public class PagoService {
 
     private final PagoValidador pagoValidador;
     private final TotalesPagoHelper totalesPagoHelper;
+
+    private final PagoRepository pagoRepository;
+
+
+    public Page<PagoListadoDto> listar(String q, LocalDate from, LocalDate to, int page, int size) {
+        Page<PagoListadoRow> base = pagoRepository.listarBase(
+                q, from, to,
+                PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "fechaPago")) // si falla por alias, quítalo
+        );
+
+        List<Integer> ids = base.getContent().stream()
+                .map(PagoListadoRow::getIdComprobante)
+                .toList();
+
+        Map<Integer, List<String>> conceptosPorId = new HashMap<>();
+
+        if (!ids.isEmpty()) {
+            pagoRepository.listarConceptosPorComprobantes(ids).forEach(r -> {
+                conceptosPorId
+                        .computeIfAbsent(r.getIdComprobante(), k -> new ArrayList<>())
+                        .add(r.getConcepto());
+            });
+        }
+
+        List<PagoListadoDto> dtos = base.getContent().stream().map(row -> {
+            PagoListadoDto dto = new PagoListadoDto();
+            dto.setIdComprobante(row.getIdComprobante());
+            dto.setIdRecibo(row.getIdRecibo());
+            dto.setFechaPago(row.getFechaPago());
+            dto.setPuesto(row.getPuesto());
+            dto.setSocio(row.getSocio());
+            dto.setMonto(row.getMonto());
+            dto.setEstado(row.getEstado());
+            dto.setConceptos(conceptosPorId.getOrDefault(row.getIdComprobante(), List.of()));
+            return dto;
+        }).toList();
+
+        return new PageImpl<>(dtos, base.getPageable(), base.getTotalElements());
+    }
 
     @Transactional
     public ComprobanteResponse registrarPago(PagoRequest request) {
@@ -151,6 +198,6 @@ public class PagoService {
 
     private String generarNumeroComprobante() {
         Long count = comprobanteRepository.count() + 1;
-        return "C-" + LocalDateTime.now().getYear() + "-" + String.format("%05d", count);
+        return "REC-" + LocalDateTime.now().getYear() + "-" + String.format("%05d", count);
     }
 }

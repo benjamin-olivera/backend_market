@@ -6,6 +6,6 @@ import java.math.BigDecimal;
 
 @Data
 public class DeudaPagoItem {
-    private Long idDeuda;
+    private Integer idDeuda;
     private BigDecimal montoPagado;
 }

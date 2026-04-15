@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ComprobanteResponse {
 
-    private Long idComprobante;
+    private Integer idComprobante;
     private String numero;
     private String tipo;
     private String codigoPuesto;
