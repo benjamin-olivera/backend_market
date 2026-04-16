@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pe.com.market.dto.PagoListadoRow;
+import pe.com.market.dto.pago.PagoListadoRow;
 import pe.com.market.dto.pago.*;
 import pe.com.market.enums.EstadoDeuda;
 import pe.com.market.model.auth.Usuario;
@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

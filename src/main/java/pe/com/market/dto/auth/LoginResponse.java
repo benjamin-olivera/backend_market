@@ -1,13 +1,10 @@
 package pe.com.market.dto.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import java.util.List;
 
-@Data
-@AllArgsConstructor
-public class LoginResponse {
+public record LoginResponse(
+        String token,
+        String username,
+        List<String> roles) {
 
-    private String mensaje;
-    private String username;
-    private String rol;
 }

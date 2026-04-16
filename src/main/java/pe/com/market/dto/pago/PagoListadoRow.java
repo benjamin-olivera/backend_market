@@ -1,4 +1,4 @@
-package pe.com.market.dto;
+package pe.com.market.dto.pago;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

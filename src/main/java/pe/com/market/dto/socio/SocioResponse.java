@@ -1,5 +1,7 @@
 package pe.com.market.dto.socio;
 
+import pe.com.market.dto.socio_puesto.PuestoSocioResponse;
+
 import java.util.List;
 
 public record SocioResponse(

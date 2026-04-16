@@ -1,4 +1,4 @@
-package pe.com.market.mapper;
+package pe.com.market.service.deuda.mapper;
 
 import org.springframework.stereotype.Component;
 import pe.com.market.dto.deuda.DeudaResponse;

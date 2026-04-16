@@ -2,70 +2,91 @@ package pe.com.market.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.com.market.dto.puesto.AsignarPuestoRequest;
-import pe.com.market.dto.puesto.PuestoRequest;
-import pe.com.market.dto.puesto.PuestoResponse;
+import pe.com.market.dto.puesto.PuestoDTO;
 import pe.com.market.model.puesto.Puesto;
-import pe.com.market.repository.puesto.PuestoRepository;
-import pe.com.market.service.puesto.SocioPuestoService;
+import pe.com.market.service.puesto.PuestoService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/puestos")
 @RequiredArgsConstructor
 public class PuestoController {
 
-    private final PuestoRepository puestoRepository;
-    private final SocioPuestoService socioPuestoService;
+    private final PuestoService puestoService;
+
+    //@GetMapping
+    //public ResponseEntity<List<PuestoResponse>> listar() {
+    //    List<PuestoResponse> lista = puestoRepository.findAll().stream()
+    //            .map(this::mapearAPuestoResponse)
+    //            .collect(Collectors.toList());
+    //    return ResponseEntity.ok(lista);
+    //}
 
     @GetMapping
-    public ResponseEntity<List<PuestoResponse>> listar() {
-        List<PuestoResponse> lista = puestoRepository.findAll().stream()
-                .map(this::mapearAPuestoResponse)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(lista);
+    public ResponseEntity<List<Puesto>> listar() {
+        return ResponseEntity.ok(puestoService.listarActivos());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Puesto> obtener(@PathVariable Integer id) {
+        return ResponseEntity.ok(puestoService.buscarPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<PuestoResponse> crear(@Valid @RequestBody PuestoRequest request) {
-        Puesto p = new Puesto();
-        p.setCodigo(request.getCodigo());
-        p.setDescripcion(request.getDescripcion());
-        p.setEsPropiedadAsociacion(request.getEsPropiedadAsociacion());
-        p.setEstado(true);
+    public ResponseEntity<Puesto> crear(@Valid @RequestBody PuestoDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(puestoService.guardar(dto));
+    }
 
-        Puesto guardado = puestoRepository.save(p);
-        return ResponseEntity.ok(mapearAPuestoResponse(guardado));
+    //@PostMapping
+    //public ResponseEntity<PuestoResponse> crear(@Valid @RequestBody PuestoRequest request) {
+    //    Puesto p = new Puesto();
+    //    p.setCodigo(request.getCodigo());
+    //    p.setDescripcion(request.getDescripcion());
+    //    p.setEstado(request.getEsPropiedadAsociacion());
+    //    p.setEstado(true);
+
+    //    Puesto guardado = puestoRepository.save(p);
+    //    return ResponseEntity.ok(mapearAPuestoResponse(guardado));
+    //}
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Puesto> actualizar(@PathVariable Integer id,
+                                             @Valid @RequestBody PuestoDTO dto) {
+        return ResponseEntity.ok(puestoService.actualizar(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+        puestoService.eliminarLogico(id);
+        return ResponseEntity.noContent().build(); // 204
     }
 
     // Asignar un puesto a un socio
-    @PostMapping("/asignar")
-    public ResponseEntity<?> asignarPuesto(@Valid @RequestBody AsignarPuestoRequest request) {
+    //@PostMapping("/asignar")
+    //public ResponseEntity<?> asignarPuesto(@Valid @RequestBody AsignarPuestoRequest request) {
 
-        socioPuestoService.asignarPuesto(
-                request.getIdSocio(),
-                request.getIdPuesto(),
-                request.getFechaAsignacion()
-        );
+    //    socioPuestoService.asignarPuesto(
+    //            request.getIdSocio(),
+    //            request.getIdPuesto(),
+    //            request.getFechaAsignacion()
+    //    );
 
-        return ResponseEntity.ok().build();
-    }
-
-
+    //    return ResponseEntity.ok().build();
+    //}
 
     // ================== helpers ==================
 
-    private PuestoResponse mapearAPuestoResponse(Puesto p) {
-        PuestoResponse resp = new PuestoResponse();
-        resp.setId(p.getIdPuesto());
-        resp.setCodigo(p.getCodigo());
-        resp.setDescripcion(p.getDescripcion());
-        resp.setEstado(p.getEstado());
-        resp.setEsPropiedadAsociacion(p.getEsPropiedadAsociacion());
-        return resp;
-    }
+    //private PuestoResponse mapearAPuestoResponse(Puesto p) {
+    //    PuestoResponse resp = new PuestoResponse();
+    //    resp.setId(p.getIdPuesto());
+    //    resp.setCodigo(p.getCodigo());
+    //    resp.setDescripcion(p.getDescripcion());
+    //    resp.setEstado(p.getEstado());
+    //    resp.setEsPropiedadAsociacion(p.getEstado());
+    //    return resp;
+    //}
 }

@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import pe.com.market.dto.auth.LoginRequest;
+import pe.com.market.dto.auth.LoginResponse;
 import pe.com.market.security.JwtService;
 
 import java.util.List;
@@ -33,8 +35,8 @@ public class AuthController {
         UserDetails user = (UserDetails) authentication.getPrincipal();
 
         List<String> roles = user.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)  // "ROLE_ADMIN"
-                .map(r -> r.replace("ROLE_", ""))     // "ADMIN"
+                .map(GrantedAuthority::getAuthority)
+                .map(r -> r.replace("ROLE_", ""))
                 .toList();
 
         String token = jwtService.generateToken(user, roles);
@@ -45,10 +47,4 @@ public class AuthController {
                 roles
         ));
     }
-
-    // DTOs simples como records (puedes ponerlos en otro paquete si prefieres)
-
-    public record LoginRequest(String username, String password) {}
-
-    public record LoginResponse(String token, String username, List<String> roles) {}
 }

@@ -14,4 +14,14 @@ public interface SocioRepository extends JpaRepository<Socio, Integer> {
     Optional<Socio> findByDniAndEstadoTrue(String dni);
 
     List<Socio> findTop10ByDniStartingWithOrderByDniAsc(String dniPrefix);
+
+    List<Socio> findByEstadoTrueOrderByNombreAsc();
+
+    boolean existsByTelefono(String telefono);
+
+    boolean existsByTelefonoAndIdSocioNot(String telefono, Integer idSocio);
+
+    boolean existsByDni(String dni);
+
+    boolean existsByDniAndIdSocioNot(String dni, Integer idSocio);
 }

@@ -18,11 +18,11 @@ public class SocioPuesto {
     @Column(name = "id_socio_puesto")
     private Integer idSocioPuesto;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_socio", nullable = false)
     private Socio socio;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_puesto", nullable = false, unique = true)
     private Puesto puesto;
 
@@ -30,5 +30,15 @@ public class SocioPuesto {
     private LocalDate fechaAsignacion;
 
     @Column(name = "fecha_fin")
-    private LocalDate fechaFin;
+    private LocalDate fechaFin; // NULL = activo, con fecha = inactivo
+
+    @PrePersist
+    public void prePersist() {
+        if (fechaAsignacion == null) fechaAsignacion = LocalDate.now();
+    }
+
+    // Métod0 helper
+    public boolean isActivo() {
+        return fechaFin == null;
+    }
 }

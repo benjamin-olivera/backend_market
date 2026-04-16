@@ -7,7 +7,7 @@ import pe.com.market.dto.deuda.DeudaResponse;
 import pe.com.market.dto.deuda.DistribuirDeudaRequest;
 import pe.com.market.dto.deuda.MismaDeudaRequest;
 import pe.com.market.enums.EstadoDeuda;
-import pe.com.market.mapper.DeudaMapper;
+import pe.com.market.service.deuda.mapper.DeudaMapper;
 import pe.com.market.model.deuda.Deuda;
 import pe.com.market.model.deuda.MotivoCobro;
 import pe.com.market.model.puesto.Puesto;
@@ -122,7 +122,7 @@ public class DeudaService {
         deuda.setFecha(java.sql.Date.valueOf(fecha));
         deuda.setEstado(EstadoDeuda.PENDIENTE);
 
-        if (Boolean.TRUE.equals(puesto.getEsPropiedadAsociacion())) {
+        if (Boolean.TRUE.equals(puesto.getEstado())) {
             deuda.setSocio(null);
         } else {
             Socio socio = obtenerSocioActualDePuesto(puesto);
@@ -134,14 +134,16 @@ public class DeudaService {
 
     private List<Puesto> obtenerPuestosObjetivo(List<String> codigosPuestos) {
 
+        // Si no especifican códigos, aplicamos a TODOS los puestos
         if (codigosPuestos == null || codigosPuestos.isEmpty()) {
-            return puestoRepository.findByEstadoTrue();
+            return puestoRepository.findAll();
         }
 
+        // Si especifican, aplicamos a esos puestos (activos o inactivos según exista)
         return codigosPuestos.stream()
-                .map(codigo -> puestoRepository.findByCodigoAndEstadoTrue(codigo)
+                .map(codigo -> puestoRepository.findByCodigo(codigo)
                         .orElseThrow(() -> new IllegalArgumentException(
-                                "Puesto " + codigo + " no existe o está inactivo")))
+                                "Puesto " + codigo + " no existe")))
                 .toList();
     }
 }

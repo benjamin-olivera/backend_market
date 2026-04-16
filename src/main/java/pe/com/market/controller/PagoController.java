@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.com.market.dto.pago.ComprobanteResponse;
@@ -38,6 +39,6 @@ public class PagoController {
             @Valid @RequestBody PagoRequest request) {
 
         ComprobanteResponse comprobante = pagoService.registrarPago(request);
-        return ResponseEntity.ok(comprobante);
+        return ResponseEntity.status(HttpStatus.CREATED).body(comprobante);
     }
 }

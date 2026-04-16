@@ -1,6 +1,7 @@
 package pe.com.market.repository.socio;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import pe.com.market.model.puesto.Puesto;
 import pe.com.market.model.puesto.SocioPuesto;
 import pe.com.market.model.socio.Socio;
@@ -24,4 +25,20 @@ public interface SocioPuestoRepository extends JpaRepository<SocioPuesto, Intege
 
     // Puestos activos (sin fecha_fin) para un socio
     List<SocioPuesto> findBySocioIdSocioAndFechaFinIsNull(Integer idSocio);
+
+    // Asignación activa de un puesto (fecha_fin IS NULL)
+    Optional<SocioPuesto> findByPuesto_IdPuestoAndFechaFinIsNull(Integer idPuesto);
+
+    // Puestos activos de un socio
+    List<SocioPuesto> findBySocio_IdSocioAndFechaFinIsNull(Integer idSocio);
+
+    // Historial completo de un puesto
+    List<SocioPuesto> findByPuesto_IdPuestoOrderByFechaAsignacionDesc(Integer idPuesto);
+
+    // Verificar si un puesto ya tiene asignación activa
+    boolean existsByPuesto_IdPuestoAndFechaFinIsNull(Integer idPuesto);
+
+    // IDs de puestos que tienen asignación activa (para filtrar en frontend)
+    @Query("SELECT sp.puesto.idPuesto FROM SocioPuesto sp WHERE sp.fechaFin IS NULL")
+    List<Integer> findIdPuestosOcupados();
 }

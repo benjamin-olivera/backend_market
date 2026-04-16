@@ -1,6 +1,8 @@
 package pe.com.market.model.puesto;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,15 +17,29 @@ public class Puesto {
     @Column(name = "id_puesto")
     private Integer idPuesto;
 
-    @Column(nullable = false, length = 20, unique = true)
+    @NotBlank(message = "El código es obligatorio")
+    @Size(max = 20)
+    @Column(name = "codigo", nullable = false, unique = true, length = 20)
     private String codigo;
 
-    @Column(length = 100)
+    @Size(max = 50)
+    @Column(name = "sector", length = 50)
+    private String sector;
+
+    @Size(max = 10)
+    @Column(name = "numero", length = 10)
+    private String numero;
+
+    @Size(max = 100)
+    @Column(name = "descripcion", length = 100)
     private String descripcion;
 
     @Column
     private Boolean estado;
 
-    @Column(name = "es_propiedad_asociacion", nullable = false)
-    private Boolean esPropiedadAsociacion = false;
+    @PrePersist
+    public void prePersist() {
+        if (estado == null) estado = true;
+    }
+
 }

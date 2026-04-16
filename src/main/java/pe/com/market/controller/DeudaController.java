@@ -20,30 +20,25 @@ public class DeudaController {
 
     // ================== GENERACIÓN ==================
     @PostMapping("/distribuir")
-    public ResponseEntity<Void> generarDeudaDistribuida(
-            @Valid @RequestBody DistribuirDeudaRequest request) {
-
+    public ResponseEntity<Void> generarDeudaDistribuida(@Valid @RequestBody DistribuirDeudaRequest request) {
         deudaService.generarDeudaDistribuida(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build(); // 204
     }
 
     @PostMapping("/misma")
-    public ResponseEntity<Void> generarMismaDeuda(
-            @Valid @RequestBody MismaDeudaRequest request) {
-
+    public ResponseEntity<Void> generarMismaDeuda(@Valid @RequestBody MismaDeudaRequest request) {
         deudaService.generarMismaDeuda(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build(); // 204
     }
 
     // ================== CONSULTA ==================
-    // Opcional: TODAS las deudas de un puesto (pendientes + pagadas)
     @GetMapping("/puesto/{codigo}")
-    public List<DeudaResponse> listarTodasPorPuesto(@PathVariable String codigo) {
-        return deudaService.listarTodasPorPuesto(codigo);
+    public ResponseEntity<List<DeudaResponse>> listarTodasPorPuesto(@PathVariable String codigo) {
+        return ResponseEntity.ok(deudaService.listarTodasPorPuesto(codigo));
     }
 
     @GetMapping("/puesto/{codigo}/pendientes")
-    public List<DeudaResponse> listarPendientesPorPuesto(@PathVariable String codigo) {
-        return deudaService.listarPendientesPorPuesto(codigo);
+    public ResponseEntity<List<DeudaResponse>> listarPendientesPorPuesto(@PathVariable String codigo) {
+        return ResponseEntity.ok(deudaService.listarPendientesPorPuesto(codigo));
     }
 }
