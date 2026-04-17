@@ -55,7 +55,10 @@ public class PagoService {
     public Page<PagoListadoDto> listar(String q, LocalDate from, LocalDate to, int page, int size) {
         Page<PagoListadoRow> base = pagoRepository.listarBase(
                 q, from, to,
-                PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "fechaPago")) // si falla por alias, quítalo
+                PageRequest.of(
+                        page,
+                        size//, Sort.by(Sort.Direction.DESC, "fechaPago")// si falla por alias, quítalo
+                        )
         );
 
         List<Integer> ids = base.getContent().stream()

@@ -1,14 +1,11 @@
 package pe.com.market.dto.pago;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
-@Getter
-@Setter
 public class PagoListadoDto {
     private Integer idComprobante;
     private String idRecibo;
@@ -17,5 +14,5 @@ public class PagoListadoDto {
     private String socio;
     private java.math.BigDecimal monto;
     private String estado;
-    private java.util.List<String> conceptos;
+    private List<String> conceptos;
 }

@@ -25,7 +25,7 @@ public class PuestoService {
 
     public Puesto buscarPorId(Integer id) {
         return repository.findById(id)
-                .filter(Puesto::getEstado)
+                //.filter(Puesto::getEstado)
                 .orElseThrow(() -> new ResourceNotFoundException("Puesto no encontrado con id: " + id));
     }
 
