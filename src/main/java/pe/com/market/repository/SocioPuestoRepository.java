@@ -1,9 +1,10 @@
-package pe.com.market.repository.socio;
+package pe.com.market.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import pe.com.market.dto.socio_puesto.SocioPuestoCountDTO;
 import pe.com.market.model.puesto.Puesto;
-import pe.com.market.model.puesto.SocioPuesto;
+import pe.com.market.model.socio_puesto.SocioPuesto;
 import pe.com.market.model.socio.Socio;
 
 import java.util.List;
@@ -41,4 +42,22 @@ public interface SocioPuestoRepository extends JpaRepository<SocioPuesto, Intege
     // IDs de puestos que tienen asignación activa (para filtrar en frontend)
     @Query("SELECT sp.puesto.idPuesto FROM SocioPuesto sp WHERE sp.fechaFin IS NULL")
     List<Integer> findIdPuestosOcupados();
+
+    @Query("""
+        select new pe.com.market.dto.socio_puesto.SocioPuestoCountDTO(sp.socio.idSocio, count(sp))
+        from SocioPuesto sp
+        where sp.fechaFin is null
+        group by sp.socio.idSocio
+    """)
+    List<SocioPuestoCountDTO> countPuestosActivosGroupBySocio();
+
+    @Query("""
+        select sp
+        from SocioPuesto sp
+        where sp.fechaFin is null
+        order by sp.puesto.codigo asc
+    """)
+    List<SocioPuesto> findActivos();
+
+
 }

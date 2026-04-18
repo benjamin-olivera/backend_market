@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.com.market.dto.socio_puesto.SocioPuestoCountDTO;
 import pe.com.market.dto.socio_puesto.SocioPuestoDTO;
-import pe.com.market.model.puesto.SocioPuesto;
+import pe.com.market.model.socio_puesto.SocioPuesto;
+import pe.com.market.repository.SocioPuestoRepository;
 import pe.com.market.service.SocioPuestoService;
 
 import java.util.List;
@@ -16,7 +18,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SocioPuestoController {
 
+    private final SocioPuestoRepository socioPuestoRepository;
     private final SocioPuestoService service;
+
+    @GetMapping("/activos")
+    public ResponseEntity<List<SocioPuesto>> listarActivos() {
+        return ResponseEntity.ok(service.listarActivos());
+    }
 
     @PostMapping
     public ResponseEntity<SocioPuesto> asignar(@Valid @RequestBody SocioPuestoDTO dto) {
@@ -33,13 +41,18 @@ public class SocioPuestoController {
         return ResponseEntity.ok(service.historialPorPuesto(idPuesto));
     }
 
+    @GetMapping("/activos/contador-por-socio")
+    public List<SocioPuestoCountDTO> contadorPorSocio() {
+        return socioPuestoRepository.countPuestosActivosGroupBySocio();
+    }
+
     @GetMapping("/socio/{idSocio}/puestos")
     public ResponseEntity<List<SocioPuesto>> puestosActivosPorSocio(@PathVariable Integer idSocio) {
         return ResponseEntity.ok(service.puestosActivosPorSocio(idSocio));
     }
 
     // Nuevo endpoint: lista IDs de puestos ocupados
-    @GetMapping("/puestos-ocupados")
+    @GetMapping("/ocupados")
     public ResponseEntity<List<Integer>> puestosOcupados() {
         return ResponseEntity.ok(service.obtenerIdsPuestosOcupados());
     }
@@ -49,4 +62,5 @@ public class SocioPuestoController {
         service.desasignar(id);
         return ResponseEntity.noContent().build();
     }
+
 }

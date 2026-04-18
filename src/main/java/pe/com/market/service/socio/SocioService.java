@@ -10,9 +10,9 @@ import pe.com.market.dto.socio.SocioDTO;
 import pe.com.market.dto.socio.SocioResponse;
 import pe.com.market.exception.BusinessException;
 import pe.com.market.exception.ResourceNotFoundException;
-import pe.com.market.model.puesto.SocioPuesto;
+import pe.com.market.model.socio_puesto.SocioPuesto;
 import pe.com.market.model.socio.Socio;
-import pe.com.market.repository.socio.SocioPuestoRepository;
+import pe.com.market.repository.SocioPuestoRepository;
 import pe.com.market.repository.socio.SocioRepository;
 
 import java.util.List;

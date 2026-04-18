@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/error").permitAll()
 
+                        .requestMatchers("/motivos-cobro/**").hasAnyRole("ADMIN","CAJERO")
                         .requestMatchers("/pagos/**").hasAnyRole("ADMIN","CAJERO")
                         .requestMatchers("/deudas/**").hasAnyRole("ADMIN","CAJERO")
                         .requestMatchers("/puestos/**").hasAnyRole("ADMIN","CAJERO")

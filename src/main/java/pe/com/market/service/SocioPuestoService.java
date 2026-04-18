@@ -1,12 +1,13 @@
 package pe.com.market.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.market.dto.socio_puesto.SocioPuestoDTO;
 import pe.com.market.exception.BusinessException;
 import pe.com.market.exception.ResourceNotFoundException;
-import pe.com.market.model.puesto.SocioPuesto;
-import pe.com.market.repository.socio.SocioPuestoRepository;
+import pe.com.market.model.socio_puesto.SocioPuesto;
+import pe.com.market.repository.SocioPuestoRepository;
 import pe.com.market.service.puesto.PuestoService;
 import pe.com.market.service.socio.SocioService;
 
@@ -14,19 +15,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SocioPuestoService {
 
     private final SocioPuestoRepository repository;
     private final SocioService socioService;
     private final PuestoService puestoService;
-
-    public SocioPuestoService(SocioPuestoRepository repository,
-                              SocioService socioService,
-                              PuestoService puestoService) {
-        this.repository = repository;
-        this.socioService = socioService;
-        this.puestoService = puestoService;
-    }
 
     @Transactional
     public SocioPuesto asignar(SocioPuestoDTO dto) {
@@ -47,6 +41,10 @@ public class SocioPuestoService {
             nueva.setFechaAsignacion(dto.getFechaAsignacion());
         }
         return repository.save(nueva);
+    }
+
+    public List<SocioPuesto> listarActivos() {
+        return repository.findActivos();
     }
 
     public SocioPuesto obtenerAsignacionActivaPorPuesto(Integer idPuesto) {

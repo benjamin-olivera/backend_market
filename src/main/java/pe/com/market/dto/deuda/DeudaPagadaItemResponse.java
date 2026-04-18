@@ -1,4 +1,4 @@
-package pe.com.market.dto.pago;
+package pe.com.market.dto.deuda;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

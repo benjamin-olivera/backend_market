@@ -1,8 +1,9 @@
-package pe.com.market.model.puesto;
+package pe.com.market.model.socio_puesto;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import pe.com.market.model.puesto.Puesto;
 import pe.com.market.model.socio.Socio;
 
 import java.time.LocalDate;
@@ -37,7 +38,6 @@ public class SocioPuesto {
         if (fechaAsignacion == null) fechaAsignacion = LocalDate.now();
     }
 
-    // Métod0 helper
     public boolean isActivo() {
         return fechaFin == null;
     }

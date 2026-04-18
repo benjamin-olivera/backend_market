@@ -2,6 +2,7 @@ package pe.com.market.dto.pago;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import pe.com.market.dto.deuda.DeudaPagadaItemResponse;
 import pe.com.market.model.deuda.Deuda;
 import pe.com.market.model.pago.Comprobante;
 

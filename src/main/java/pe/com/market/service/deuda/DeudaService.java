@@ -3,23 +3,25 @@ package pe.com.market.service.deuda;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pe.com.market.dto.deuda.DeudaListadoResponse;
 import pe.com.market.dto.deuda.DeudaResponse;
 import pe.com.market.dto.deuda.DistribuirDeudaRequest;
 import pe.com.market.dto.deuda.MismaDeudaRequest;
 import pe.com.market.enums.EstadoDeuda;
 import pe.com.market.service.deuda.mapper.DeudaMapper;
 import pe.com.market.model.deuda.Deuda;
-import pe.com.market.model.deuda.MotivoCobro;
+import pe.com.market.model.concepto.MotivoCobro;
 import pe.com.market.model.puesto.Puesto;
-import pe.com.market.model.puesto.SocioPuesto;
+import pe.com.market.model.socio_puesto.SocioPuesto;
 import pe.com.market.model.socio.Socio;
 import pe.com.market.repository.deuda.DeudaRepository;
-import pe.com.market.repository.deuda.MotivoCobroRepository;
+import pe.com.market.repository.concepto.MotivoCobroRepository;
 import pe.com.market.repository.puesto.PuestoRepository;
-import pe.com.market.repository.socio.SocioPuestoRepository;
+import pe.com.market.repository.SocioPuestoRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -78,6 +80,22 @@ public class DeudaService {
     }
 
     // --------- CONSULTA DE DEUDAS ---------
+
+
+    public List<DeudaListadoResponse> listarFiltrado(
+            String q,
+            EstadoDeuda estado,
+            Integer idMotivo,
+            LocalDate fechaDesde,
+            LocalDate fechaHasta
+    ) {
+        Date desde = (fechaDesde != null) ? Date.valueOf(fechaDesde) : null;
+        Date hasta = (fechaHasta != null) ? Date.valueOf(fechaHasta) : null;
+
+        String qq = (q == null || q.trim().isEmpty()) ? null : q.trim();
+
+        return deudaRepository.listarFiltrado(qq, estado, idMotivo, desde, hasta);
+    }
 
     // Para la pantalla de caja
     public List<DeudaResponse> listarPendientesPorPuesto(String codigoPuesto) {

@@ -27,6 +27,11 @@ public class PuestoController {
     //}
 
     @GetMapping
+    public ResponseEntity<List<Puesto>> listarTodos() {
+        return ResponseEntity.ok(puestoService.listarTodos());
+    }
+
+    @GetMapping("/activos")
     public ResponseEntity<List<Puesto>> listar() {
         return ResponseEntity.ok(puestoService.listarActivos());
     }

@@ -16,6 +16,8 @@ public interface PuestoRepository extends JpaRepository<Puesto, Integer> {
     // Nuevo: buscar un puesto por código y estado = true
     Optional<Puesto> findByCodigoAndEstadoTrue(String codigo);
 
+    List<Puesto> findAllByOrderByCodigoAsc();
+
     List<Puesto> findByEstadoTrueOrderByCodigoAsc();
 
     boolean existsByCodigo(String codigo);

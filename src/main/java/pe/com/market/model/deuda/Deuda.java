@@ -5,12 +5,12 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import pe.com.market.enums.EstadoDeuda;
+import pe.com.market.model.concepto.MotivoCobro;
 import pe.com.market.model.puesto.Puesto;
 import pe.com.market.model.socio.Socio;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "deuda")
@@ -23,15 +23,15 @@ public class Deuda {
     @Column(name = "id_deuda")
     private Integer idDeuda;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_puesto", nullable = false)
     private Puesto puesto;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_motivo", nullable = false)
     private MotivoCobro motivo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_socio")
     private Socio socio;
 

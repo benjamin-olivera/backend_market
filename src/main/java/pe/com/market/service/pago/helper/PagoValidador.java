@@ -2,7 +2,7 @@ package pe.com.market.service.pago.helper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import pe.com.market.dto.pago.DeudaPagoItem;
+import pe.com.market.dto.deuda.DeudaPagoItem;
 import pe.com.market.enums.EstadoDeuda;
 import pe.com.market.model.deuda.Deuda;
 import pe.com.market.model.puesto.Puesto;

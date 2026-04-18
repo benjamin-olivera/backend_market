@@ -1,5 +1,6 @@
 package pe.com.market.service.puesto;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.market.dto.puesto.PuestoDTO;
@@ -11,12 +12,13 @@ import pe.com.market.repository.puesto.PuestoRepository;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PuestoService {
 
     private final PuestoRepository repository;
 
-    public PuestoService(PuestoRepository repository) {
-        this.repository = repository;
+    public List<Puesto> listarTodos() {
+        return repository.findAllByOrderByCodigoAsc();
     }
 
     public List<Puesto> listarActivos() {

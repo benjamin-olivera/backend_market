@@ -1,7 +1,7 @@
 package pe.com.market.dto.pago;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import pe.com.market.dto.deuda.DeudaPagoItem;
 
 import java.time.LocalDateTime;
 import java.util.List;
