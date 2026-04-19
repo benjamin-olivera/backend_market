@@ -1,6 +1,6 @@
 package pe.com.market.enums;
 
-public enum EstadoMotivoCobro {
+public enum EstadoConcepto {
     ACTIVO,
     SUSPENDIDO
-}
+} // EstadoConcepto

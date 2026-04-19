@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/error").permitAll()
 
-                        .requestMatchers("/motivos-cobro/**").hasAnyRole("ADMIN","CAJERO")
+                        .requestMatchers("/conceptos/**").hasAnyRole("ADMIN","CAJERO")
                         .requestMatchers("/pagos/**").hasAnyRole("ADMIN","CAJERO")
                         .requestMatchers("/deudas/**").hasAnyRole("ADMIN","CAJERO")
                         .requestMatchers("/puestos/**").hasAnyRole("ADMIN","CAJERO")
@@ -57,7 +57,7 @@ public class SecurityConfig {
         // Para pruebas, también puedes usar:
         // config.setAllowedOrigins(List.of("*"));
 
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
 

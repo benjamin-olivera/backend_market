@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import pe.com.market.enums.EstadoDeuda;
-import pe.com.market.model.concepto.MotivoCobro;
+import pe.com.market.model.concepto.Concepto;
 import pe.com.market.model.puesto.Puesto;
 import pe.com.market.model.socio.Socio;
 
@@ -29,7 +29,7 @@ public class Deuda {
 
     @ManyToOne
     @JoinColumn(name = "id_motivo", nullable = false)
-    private MotivoCobro motivo;
+    private Concepto motivo;
 
     @ManyToOne
     @JoinColumn(name = "id_socio")

@@ -10,12 +10,12 @@ import pe.com.market.dto.deuda.MismaDeudaRequest;
 import pe.com.market.enums.EstadoDeuda;
 import pe.com.market.service.deuda.mapper.DeudaMapper;
 import pe.com.market.model.deuda.Deuda;
-import pe.com.market.model.concepto.MotivoCobro;
+import pe.com.market.model.concepto.Concepto;
 import pe.com.market.model.puesto.Puesto;
 import pe.com.market.model.socio_puesto.SocioPuesto;
 import pe.com.market.model.socio.Socio;
 import pe.com.market.repository.deuda.DeudaRepository;
-import pe.com.market.repository.concepto.MotivoCobroRepository;
+import pe.com.market.repository.concepto.ConceptoRepository;
 import pe.com.market.repository.puesto.PuestoRepository;
 import pe.com.market.repository.SocioPuestoRepository;
 
@@ -32,7 +32,7 @@ public class DeudaService {
 
     private final DeudaRepository deudaRepository;
     private final PuestoRepository puestoRepository;
-    private final MotivoCobroRepository motivoCobroRepository;
+    private final ConceptoRepository conceptoRepository;
     private final SocioPuestoRepository socioPuestoRepository;
     private final DeudaMapper deudaMapper;
 
@@ -40,7 +40,7 @@ public class DeudaService {
     @Transactional
     public void generarDeudaDistribuida(DistribuirDeudaRequest request) {
 
-        MotivoCobro motivo = motivoCobroRepository.findById(request.getIdMotivo())
+        Concepto motivo = conceptoRepository.findById(request.getIdMotivo())
                 .orElseThrow(() -> new IllegalArgumentException("Motivo de cobro no encontrado"));
 
         BigDecimal montoTotal = request.getMontoTotal();
@@ -63,7 +63,7 @@ public class DeudaService {
     @Transactional
     public void generarMismaDeuda(MismaDeudaRequest request) {
 
-        MotivoCobro motivo = motivoCobroRepository.findById(request.getIdMotivo())
+        Concepto motivo = conceptoRepository.findById(request.getIdMotivo())
                 .orElseThrow(() -> new IllegalArgumentException("Motivo de cobro no encontrado"));
 
         BigDecimal monto = request.getMonto();
@@ -129,7 +129,7 @@ public class DeudaService {
     }
 
     private void crearDeudaParaPuesto(Puesto puesto,
-                                      MotivoCobro motivo,
+                                      Concepto motivo,
                                       BigDecimal monto,
                                       LocalDate fecha) {
 

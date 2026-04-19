@@ -1,13 +1,13 @@
 package pe.com.market.dto.concepto;
 
-import pe.com.market.enums.EstadoMotivoCobro;
+import pe.com.market.enums.EstadoConcepto;
 
 import java.time.LocalDateTime;
 
-public record MotivoCobroResponse(
+public record ConceptoResponse(
         Integer idMotivo,
         String nombre,
         String descripcion,
-        EstadoMotivoCobro estado,
+        EstadoConcepto estado,
         LocalDateTime fechaCreacion
 ) {}

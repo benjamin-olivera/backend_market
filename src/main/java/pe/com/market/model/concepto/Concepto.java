@@ -3,7 +3,7 @@ package pe.com.market.model.concepto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import pe.com.market.enums.EstadoMotivoCobro;
+import pe.com.market.enums.EstadoConcepto;
 
 import java.time.LocalDateTime;
 
@@ -11,14 +11,14 @@ import java.time.LocalDateTime;
 @Table(name = "motivo_cobro")
 @Getter
 @Setter
-public class MotivoCobro {
+public class Concepto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_motivo")
     private Integer idMotivo;
 
-    @Column(name = "nombre", nullable = false, length = 100)
+    @Column(name = "nombre", unique = true, nullable = false, length = 100)
     private String nombre;
 
     @Column(name = "descripcion", length = 255)
@@ -26,7 +26,7 @@ public class MotivoCobro {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false, length = 15)
-    private EstadoMotivoCobro estado = EstadoMotivoCobro.ACTIVO;
+    private EstadoConcepto estado = EstadoConcepto.ACTIVO;
 
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
