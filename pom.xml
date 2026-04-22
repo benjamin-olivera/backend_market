@@ -72,6 +72,19 @@
             <artifactId>java-jwt</artifactId>
             <version>4.4.0</version>
         </dependency>
+        <!-- JasperReports -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.21.5</version>
+<!--        <version>7.0.6</version>-->
+        </dependency>
+        <!-- (Opcional pero común) Para imágenes/barcodes/qr si luego lo usan -->
+        <!-- <dependency>
+          <groupId>net.sf.barcode4j</groupId>
+          <artifactId>barcode4j</artifactId>
+          <version>2.1</version>
+        </dependency> -->
     </dependencies>
 
     <build>

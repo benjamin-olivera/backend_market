@@ -63,9 +63,9 @@ public class ReportePagosService {
         List<DetalleComprobante> detalles = detalleComprobanteRepository.findByComprobante(c);
 
         if (!detalles.isEmpty()) {
-            DetalleComprobante det = detalles.get(0);
+            DetalleComprobante det = detalles.getFirst();
             Deuda deuda = det.getDeuda();
-            concepto = deuda.getMotivo().getDescripcion();
+            concepto = deuda.getConcepto().getDescripcion();
 
             if (deuda.getSocio() != null) {
                 nombreSocio = deuda.getSocio().getNombre();
@@ -78,7 +78,7 @@ public class ReportePagosService {
         if (metodos.isEmpty()) {
             metodoPago = "N/A";
         } else if (metodos.size() == 1) {
-            metodoPago = metodos.get(0).getMetodo().name(); // String "EFECTIVO"
+            metodoPago = metodos.getFirst().getMetodo().name(); // String "EFECTIVO"
         } else {
             metodoPago = "MIXTO";
         }

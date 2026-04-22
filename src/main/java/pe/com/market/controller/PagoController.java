@@ -4,12 +4,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.com.market.dto.pago.ComprobanteResponse;
 import pe.com.market.dto.pago.PagoListadoDto;
 import pe.com.market.dto.pago.PagoRequest;
+import pe.com.market.service.pago.ComprobantePdfService;
 import pe.com.market.service.pago.PagoService;
 
 import java.time.LocalDate;
@@ -20,6 +23,7 @@ import java.time.LocalDate;
 public class PagoController {
 
     private final PagoService pagoService;
+    private final ComprobantePdfService comprobantePdfService;
 
     @GetMapping
     public ResponseEntity<Page<PagoListadoDto>> listarPagos(
@@ -32,6 +36,22 @@ public class PagoController {
             @RequestParam(defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(pagoService.listar(q, from, to, page, size));
+    }
+
+    @GetMapping("/{id}/comprobante.pdf")
+    public ResponseEntity<byte[]> descargarComprobantePdf(
+            @PathVariable Integer id,
+            @RequestParam(defaultValue = "false") boolean download
+    ) {
+        byte[] pdf = comprobantePdfService.generarPdf(id);
+
+        String dispositionType = download ? "attachment" : "inline";
+        String filename = "comprobante-" + id + ".pdf";
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, dispositionType + "; filename=\"" + filename + "\"")
+                .body(pdf);
     }
 
     @PostMapping

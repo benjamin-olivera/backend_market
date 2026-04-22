@@ -29,7 +29,7 @@ public class Deuda {
 
     @ManyToOne
     @JoinColumn(name = "id_motivo", nullable = false)
-    private Concepto motivo;
+    private Concepto concepto;
 
     @ManyToOne
     @JoinColumn(name = "id_socio")

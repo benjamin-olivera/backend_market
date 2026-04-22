@@ -35,7 +35,7 @@ public interface DeudaRepository extends JpaRepository<Deuda, Integer> {
       )
       from Deuda d
       join d.puesto p
-      join d.motivo m
+      join d.concepto m
       left join d.socio s
       where (:estado is null or d.estado = :estado)
         and (:idMotivo is null or m.idMotivo = :idMotivo)

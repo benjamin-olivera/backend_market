@@ -33,7 +33,7 @@ public class ComprobanteResponse {
         List<DeudaPagadaItemResponse> deudasResp = deudas.stream()
                 .map(d -> new DeudaPagadaItemResponse(
                         d.getIdDeuda(),
-                        d.getMotivo().getDescripcion(),
+                        d.getConcepto().getDescripcion(),
                         d.getMonto(),
                         d.getFecha()
                 ))

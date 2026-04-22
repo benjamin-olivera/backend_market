@@ -135,7 +135,7 @@ public class DeudaService {
 
         Deuda deuda = new Deuda();
         deuda.setPuesto(puesto);
-        deuda.setMotivo(motivo);
+        deuda.setConcepto(motivo);
         deuda.setMonto(monto);
         deuda.setFecha(java.sql.Date.valueOf(fecha));
         deuda.setEstado(EstadoDeuda.PENDIENTE);

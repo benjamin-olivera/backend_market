@@ -11,7 +11,7 @@ public class DeudaMapper {
         return new DeudaResponse(
                 deuda.getIdDeuda(),
                 deuda.getPuesto().getCodigo(),
-                deuda.getMotivo().getDescripcion(),
+                deuda.getConcepto().getDescripcion(),
                 deuda.getMonto(),
                 deuda.getFecha(),
                 deuda.getEstado()

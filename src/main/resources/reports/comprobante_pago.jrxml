@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="comprobante_pago"
+              pageWidth="595" pageHeight="842"
+              columnWidth="555"
+              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+
+    <!-- ===== Parameters ===== -->
+    <parameter name="EMPRESA_NOMBRE" class="java.lang.String"/>
+    <parameter name="EMPRESA_RUC" class="java.lang.String"/>
+    <parameter name="EMPRESA_DIRECCION" class="java.lang.String"/>
+    <parameter name="EMPRESA_TELEFONO" class="java.lang.String"/>
+
+    <parameter name="RECIBO_NUMERO" class="java.lang.String"/>
+    <parameter name="FECHA_PAGO" class="java.lang.String"/>
+    <parameter name="PUESTO" class="java.lang.String"/>
+    <parameter name="SOCIO" class="java.lang.String"/>
+
+    <parameter name="TOTAL" class="java.math.BigDecimal"/>
+    <parameter name="VUELTO" class="java.math.BigDecimal"/>
+
+    <parameter name="LOGO_PATH" class="java.lang.String"/>
+
+    <!-- ===== Fields (JRBeanCollectionDataSource) ===== -->
+    <field name="concepto" class="java.lang.String"/>
+    <field name="monto" class="java.math.BigDecimal"/>
+
+    <!-- ===== Title ===== -->
+    <title>
+        <band height="95">
+            <image>
+                <reportElement x="0" y="0" width="60" height="60"/>
+                <imageExpression><![CDATA[
+                    java.lang.Thread.currentThread().getContextClassLoader().getResourceAsStream($P{LOGO_PATH})
+                ]]></imageExpression>
+            </image>
+
+            <textField>
+                <reportElement x="70" y="0" width="485" height="18"/>
+                <textFieldExpression><![CDATA[$P{EMPRESA_NOMBRE}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="70" y="18" width="485" height="16"/>
+                <textFieldExpression><![CDATA["RUC: " + $P{EMPRESA_RUC}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="70" y="34" width="485" height="16"/>
+                <textFieldExpression><![CDATA[$P{EMPRESA_DIRECCION}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="70" y="50" width="485" height="16"/>
+                <textFieldExpression><![CDATA["Tel: " + $P{EMPRESA_TELEFONO}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="0" y="75" width="555" height="18"/>
+                <textFieldExpression><![CDATA[
+                    "RECIBO: " + $P{RECIBO_NUMERO} + "   |   Fecha: " + $P{FECHA_PAGO}
+                ]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <!-- ===== Page Header ===== -->
+    <pageHeader>
+        <band height="40">
+            <textField>
+                <reportElement x="0" y="0" width="555" height="16"/>
+                <textFieldExpression><![CDATA["Socio: " + $P{SOCIO}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="0" y="18" width="555" height="16"/>
+                <textFieldExpression><![CDATA["Puesto: " + $P{PUESTO}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageHeader>
+
+    <!-- ===== Column Header ===== -->
+    <columnHeader>
+        <band height="18">
+            <staticText>
+                <reportElement x="0" y="0" width="435" height="18"/>
+                <text><![CDATA[Concepto]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="435" y="0" width="120" height="18"/>
+                <text><![CDATA[Monto]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- ===== Detail ===== -->
+    <detail>
+        <band height="16">
+            <textField>
+                <reportElement x="0" y="0" width="435" height="16"/>
+                <textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
+            </textField>
+
+            <textField pattern="#,##0.00">
+                <reportElement x="435" y="0" width="120" height="16"/>
+                <textFieldExpression><![CDATA[$F{monto}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <!-- ===== Summary ===== -->
+    <summary>
+        <band height="55">
+            <staticText>
+                <reportElement x="0" y="10" width="435" height="16"/>
+                <text><![CDATA[TOTAL]]></text>
+            </staticText>
+            <textField pattern="#,##0.00">
+                <reportElement x="435" y="10" width="120" height="16"/>
+                <textFieldExpression><![CDATA[$P{TOTAL}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="0" y="28" width="435" height="16"/>
+                <text><![CDATA[VUELTO]]></text>
+            </staticText>
+            <textField pattern="#,##0.00">
+                <reportElement x="435" y="28" width="120" height="16"/>
+                <textFieldExpression><![CDATA[$P{VUELTO}]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+
+</jasperReport>

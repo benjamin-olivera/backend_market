@@ -82,12 +82,12 @@ public interface PagoRepository extends JpaRepository<Comprobante, Integer> {
     @Query(value = """
       SELECT
         dc.id_comprobante AS idComprobante,
-        mc.descripcion AS concepto
+        c.nombre AS concepto
       FROM detalle_comprobante dc
       JOIN deuda d ON d.id_deuda = dc.id_deuda
-      JOIN motivo_cobro mc ON mc.id_motivo = d.id_motivo
+      JOIN motivo_cobro c ON c.id_motivo = d.id_motivo
       WHERE dc.id_comprobante IN (:ids)
-      ORDER BY dc.id_comprobante, mc.descripcion
+      ORDER BY dc.id_comprobante, c.nombre
       """, nativeQuery = true)
     List<PagoConceptoRow> listarConceptosPorComprobantes(@Param("ids") List<Integer> ids);
 }
