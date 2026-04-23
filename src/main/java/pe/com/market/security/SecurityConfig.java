@@ -42,8 +42,10 @@ public class SecurityConfig {
                         .requestMatchers("/puestos/**").hasAnyRole("ADMIN","CAJERO")
                         .requestMatchers("/socios/**").hasAnyRole("ADMIN","CAJERO")
                         .requestMatchers("/socio-puesto/**").hasAnyRole("ADMIN","CAJERO")
+                        .requestMatchers("/reportes/caja/**").hasAnyRole("ADMIN","CAJERO")
 
                         .anyRequest().authenticated()
+
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
